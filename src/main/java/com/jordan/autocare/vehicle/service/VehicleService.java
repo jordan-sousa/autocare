@@ -3,15 +3,17 @@ package com.jordan.autocare.vehicle.service;
 import com.jordan.autocare.vehicle.domain.Vehicle;
 import com.jordan.autocare.vehicle.repository.VehicleRepository;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
 public class VehicleService {
 
     private final VehicleRepository vehicleRepository;
+
+    public VehicleService(VehicleRepository vehicleRepository) {
+        this.vehicleRepository = vehicleRepository;
+    }
 
     @Transactional
     public Vehicle createVehicle(Vehicle vehicle) {
