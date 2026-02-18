@@ -6,8 +6,21 @@ import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDate;
 
-public record MaintenanceCreateRequest(@NotNull MaintenanceType type,
-                                       @NotNull LocalDate date,
-                                       @NotNull @Positive Integer mileagePerformed,
-                                       @NotNull @Positive Integer nextMaintenanceMileage) {
-}
+public record MaintenanceCreateRequest(
+        @NotNull
+        MaintenanceType type,
+
+        @NotNull
+        LocalDate date,
+
+        @NotNull
+        String description,
+
+        @NotNull
+        @Positive
+        Integer mileagePerformed,
+
+        @NotNull
+        @Positive
+        Integer nextMaintenanceMileage
+) {}

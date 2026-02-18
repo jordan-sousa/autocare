@@ -2,13 +2,18 @@ package com.jordan.autocare.maintenance.dto;
 
 import com.jordan.autocare.maintenance.domain.MaintenanceStatus;
 import com.jordan.autocare.maintenance.domain.MaintenanceType;
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
+import lombok.Data;
 
 import java.time.LocalDate;
 
-public record MaintenanceResponse(Long id,
-                                  MaintenanceType type,
-                                  LocalDate date,
-                                  Integer mileagePerformed,
-                                  Integer nextMaintenanceMileage,
-                                  MaintenanceStatus status) {
-}
+public record MaintenanceResponse(
+        Long id,
+        MaintenanceType type,
+        LocalDate date,
+        String description,
+        Integer mileagePerformed,
+        Integer nextMaintenanceMileage,
+        MaintenanceStatus status
+) {}

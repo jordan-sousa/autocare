@@ -23,22 +23,34 @@ public class Maintenance {
 
     private LocalDate date;
 
+    private String description;
+
     private Integer mileagePerformed;
     private Integer nextMaintenanceMileage;
 
-    @Enumerated(EnumType.STRING)
-    private MaintenanceStatus status;
+//    @Enumerated(EnumType.STRING)
+//    private MaintenanceStatus status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Vehicle vehicle;
 
-    public void calculateStatus(Integer currentVehicleMileage) {
-        if (currentVehicleMileage >= nextMaintenanceMileage) {
-            this.status = MaintenanceStatus.ATRASADA;
-        } else if (nextMaintenanceMileage - currentVehicleMileage <= 1000) {
-            this.status = MaintenanceStatus.ATENCAO;
-        } else {
-            this.status = MaintenanceStatus.EM_DIA;
+    public MaintenanceStatus calculateStatus() {
+        if (vehicle == null || vehicle.getCurrentMileage() == null || nextMaintenanceMileage == null) {
+            return MaintenanceStatus.EM_DIA;
         }
+
+        Integer currentMileage = vehicle.getCurrentMileage();
+
+        if (currentMileage >= nextMaintenanceMileage) {
+            return MaintenanceStatus.ATRASADA;
+        }
+
+        int difference = nextMaintenanceMileage - currentMileage;
+
+        if (difference <= 1000) {
+            return MaintenanceStatus.ATENCAO;
+        }
+
+        return MaintenanceStatus.EM_DIA;
     }
 }
