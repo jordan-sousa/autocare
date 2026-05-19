@@ -24,7 +24,7 @@ public class MaintenanceController {
     }
 
     @GetMapping("/{maintenanceId}")
-    public ResponseEntity<MaintenanceResponse> finfById(@PathVariable Long vehicleId, @PathVariable Long maintenanceId) {
+    public ResponseEntity<MaintenanceResponse> findById(@PathVariable Long vehicleId, @PathVariable Long maintenanceId) {
 
         return ResponseEntity.ok(
                 maintenanceService.findById(vehicleId, maintenanceId)

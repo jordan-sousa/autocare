@@ -3,11 +3,12 @@ package com.jordan.autocare.maintenance.service;
 import com.jordan.autocare.maintenance.domain.Maintenance;
 import com.jordan.autocare.maintenance.dto.MaintenanceCreateRequest;
 import com.jordan.autocare.maintenance.dto.MaintenanceResponse;
+import com.jordan.autocare.maintenance.exception.MaintenanceNotFoundException;
+import com.jordan.autocare.maintenance.exception.MaintenanceNotOwnedException;
 import com.jordan.autocare.maintenance.mapper.MaintenanceMapper;
 import com.jordan.autocare.maintenance.repository.MaintenanceRepository;
 import com.jordan.autocare.vehicle.domain.Vehicle;
 import com.jordan.autocare.vehicle.service.VehicleService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,17 +25,14 @@ public class MaintenanceService {
 
         Vehicle vehicle = vehicleService.findEntityById(vehicleId);
 
-        if (request.mileagePerformed() < vehicle.getCurrentMileage()) {
-            throw new IllegalArgumentException(
-                    "Quilometragem da manuteção não pode ser menor que a  quilometragem atual do veículo"
-            );
-        }
+        vehicle.validateMaintenanceMileage(request.mileagePerformed());
 
         Maintenance maintenance = Maintenance.builder()
                 .type(request.type())
                 .date(request.date())
                 .description(request.description())
-                .mileagePerformed(request.nextMaintenanceMileage())
+                .mileagePerformed(request.mileagePerformed())
+                .nextMaintenanceMileage(request.nextMaintenanceMileage())
                 .vehicle(vehicle)
                 .build();
 
@@ -46,10 +44,10 @@ public class MaintenanceService {
     @Transactional(readOnly = true)
     public MaintenanceResponse findById(Long vehicleId, Long maintenanceId) {
         Maintenance maintenance = maintenanceRepository.findById(maintenanceId)
-                .orElseThrow(() -> new EntityNotFoundException("Manutenção não encontrada!"));
+                .orElseThrow(() -> new MaintenanceNotFoundException(maintenanceId));
 
         if (!maintenance.getVehicle().getId().equals(vehicleId)) {
-            throw new IllegalArgumentException("Manutençao não pertence ao veículo informado!");
+            throw new MaintenanceNotOwnedException(maintenanceId, vehicleId);
         }
 
         return MaintenanceMapper.toResponse(maintenance);

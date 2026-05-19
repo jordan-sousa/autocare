@@ -4,10 +4,9 @@ import com.jordan.autocare.vehicle.domain.Vehicle;
 import com.jordan.autocare.vehicle.dto.VehicleCreateRequest;
 import com.jordan.autocare.vehicle.dto.VehicleMileageUpdateRequest;
 import com.jordan.autocare.vehicle.dto.VehicleResponse;
+import com.jordan.autocare.vehicle.exception.VehicleNotFoundException;
 import com.jordan.autocare.vehicle.mapper.VehicleMapper;
 import com.jordan.autocare.vehicle.repository.VehicleRepository;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +38,7 @@ public class VehicleService {
     public VehicleResponse findById(Long id) {
 
         Vehicle vehicle = vehicleRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Veiculo não encontrado"));
+                .orElseThrow(() -> new VehicleNotFoundException(id));
 
         return VehicleMapper.toResponse(vehicle);
     }
@@ -47,21 +46,16 @@ public class VehicleService {
     @Transactional(readOnly = true)
     public Vehicle findEntityById(Long id) {
         return vehicleRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Veículo não encontrado"));
+                .orElseThrow(() -> new VehicleNotFoundException(id));
     }
-
 
     @Transactional
     public VehicleResponse updateMileage(Long id, VehicleMileageUpdateRequest request) {
 
         Vehicle vehicle = vehicleRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Veiculo não encontrado"));
+                .orElseThrow(() -> new VehicleNotFoundException(id));
 
-        if (request.newMileage() < vehicle.getCurrentMileage()) {
-            throw  new IllegalArgumentException("Nova quilometragem nãõ pode ser menor que a atual");
-        }
-
-        vehicle.setCurrentMileage(request.newMileage());
+        vehicle.updateMileage(request.newMileage());
 
         return VehicleMapper.toResponse(vehicle);
     }

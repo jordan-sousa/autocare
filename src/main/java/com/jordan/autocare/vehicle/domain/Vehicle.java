@@ -2,33 +2,81 @@ package com.jordan.autocare.vehicle.domain;
 
 import com.jordan.autocare.auth.domain.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
+@Table(name = "vehicles")
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
+@EqualsAndHashCode(of = "id")
 public class Vehicle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String brand;
+
+    @Column(nullable = false)
     private String model;
+
     private Integer year;
 
+    @PositiveOrZero
     private Integer currentMileage;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    public void updateMileage(Integer newMeleage) {
-        if (newMeleage < this.currentMileage) {
-            throw new IllegalArgumentException("Quilometragem não pode diminuir");
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(nullable = false)
+    private LocalDateTime updateAt;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+        this.updateAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updateAt = LocalDateTime.now();
+    }
+
+    public void updateMileage(Integer newMileage) {
+        validateMileage(newMileage);
+
+        this.currentMileage = newMileage;
+    }
+
+    public void validateMaintenanceMileage(Integer mileagePerformed) {
+        if (mileagePerformed < this.currentMileage) {
+            throw new IllegalArgumentException(
+                    "Quilometragem da manutenção não pode ser menor que a quilometragem atual do veículo"
+            );
         }
-        this.currentMileage = newMeleage;
+    }
+
+    private void validateMileage(Integer mileage) {
+        if (mileage == null) {
+            throw new IllegalArgumentException("A quilometragem não pode ser nula.");
+        }
+
+        if (mileage < this.currentMileage) {
+            throw new IllegalArgumentException("A quilometragem não pode diminuir");
+        }
+
+        if (mileage > 2_000_000) {
+            throw new IllegalArgumentException("Quilometragem inválida");
+        }
     }
 }

@@ -6,16 +6,20 @@ import jakarta.validation.constraints.Positive;
 
 public record VehicleCreateRequest(
 
-        @NotBlank
+        @NotBlank(message = "A marca é obrigatória")
         String brand,
 
-        @NotBlank
+        @NotBlank(message = "O modelo é obrigatório")
         String model,
 
-        @NotNull
+        @NotNull(message = "O ano é obrigatório")
         Integer year,
 
-        @NotNull
-        @Positive
-        Integer currentMileage) {
+        @NotNull(message = "É necessário informar a quilometragem atual")
+        @Positive(message = "A quilometragem deve ser positiva")
+        Integer currentMileage,
+
+        @NotNull(message = "O ID do usuário é obrigatório")
+        Long userId
+) {
 }

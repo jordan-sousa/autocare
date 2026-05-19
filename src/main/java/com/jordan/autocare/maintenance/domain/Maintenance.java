@@ -8,7 +8,6 @@ import java.time.LocalDate;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -35,11 +34,11 @@ public class Maintenance {
     private Vehicle vehicle;
 
     public MaintenanceStatus calculateStatus() {
-        if (vehicle == null || vehicle.getCurrentMileage() == null || nextMaintenanceMileage == null) {
+        if (vehicle == null || nextMaintenanceMileage == null) {
             return MaintenanceStatus.EM_DIA;
         }
 
-        Integer currentMileage = vehicle.getCurrentMileage();
+        int currentMileage = vehicle.getCurrentMileage();
 
         if (currentMileage >= nextMaintenanceMileage) {
             return MaintenanceStatus.ATRASADA;

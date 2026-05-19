@@ -1,6 +1,5 @@
 package com.jordan.autocare.vehicle.controller;
 
-import com.jordan.autocare.vehicle.domain.Vehicle;
 import com.jordan.autocare.vehicle.dto.VehicleCreateRequest;
 import com.jordan.autocare.vehicle.dto.VehicleMileageUpdateRequest;
 import com.jordan.autocare.vehicle.dto.VehicleResponse;
