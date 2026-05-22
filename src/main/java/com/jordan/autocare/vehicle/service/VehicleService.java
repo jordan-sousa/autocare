@@ -1,5 +1,7 @@
 package com.jordan.autocare.vehicle.service;
 
+import com.jordan.autocare.auth.domain.User;
+import com.jordan.autocare.auth.repository.UserRepository;
 import com.jordan.autocare.vehicle.domain.Vehicle;
 import com.jordan.autocare.vehicle.dto.VehicleCreateRequest;
 import com.jordan.autocare.vehicle.dto.VehicleMileageUpdateRequest;
@@ -18,15 +20,21 @@ import java.util.List;
 public class VehicleService {
 
     private final VehicleRepository vehicleRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public VehicleResponse create(VehicleCreateRequest request) {
+
+        User user  = userRepository.findById(request.userId())
+                .orElseThrow(() ->
+                        new RuntimeException("Usuario não encontrado"));
 
         Vehicle vehicle = Vehicle.builder()
                 .brand(request.brand())
                 .model(request.model())
                 .year(request.year())
                 .currentMileage(request.currentMileage())
+                .user(user)
                 .build();
 
         Vehicle saved = vehicleRepository.save(vehicle);

@@ -1,6 +1,7 @@
 package com.jordan.autocare.maintenance.dto;
 
 import com.jordan.autocare.maintenance.domain.MaintenanceType;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
@@ -14,6 +15,7 @@ public record MaintenanceCreateRequest(
         LocalDate date,
 
         @NotNull
+        @NotBlank
         String description,
 
         @NotNull

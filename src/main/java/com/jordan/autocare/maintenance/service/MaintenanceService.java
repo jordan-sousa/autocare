@@ -36,6 +36,8 @@ public class MaintenanceService {
                 .vehicle(vehicle)
                 .build();
 
+        maintenance.validateMaintenanceMileage();
+
         Maintenance saved = maintenanceRepository.save(maintenance);
 
         return MaintenanceMapper.toResponse(saved);
@@ -43,7 +45,7 @@ public class MaintenanceService {
 
     @Transactional(readOnly = true)
     public MaintenanceResponse findById(Long vehicleId, Long maintenanceId) {
-        Maintenance maintenance = maintenanceRepository.findById(maintenanceId)
+        Maintenance maintenance = maintenanceRepository.findByIdAndVehicleId(maintenanceId, vehicleId)
                 .orElseThrow(() -> new MaintenanceNotFoundException(maintenanceId));
 
         if (!maintenance.getVehicle().getId().equals(vehicleId)) {
