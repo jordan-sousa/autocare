@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MaintenanceService {
@@ -53,5 +55,14 @@ public class MaintenanceService {
         }
 
         return MaintenanceMapper.toResponse(maintenance);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MaintenanceResponse> findAll(Long vehicleId) {
+
+        return maintenanceRepository.findByVehicleId(vehicleId)
+                .stream()
+                .map(MaintenanceMapper::toResponse)
+                .toList();
     }
 }
