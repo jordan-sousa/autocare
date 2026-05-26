@@ -10,6 +10,8 @@ import com.jordan.autocare.vehicle.exception.VehicleNotFoundException;
 import com.jordan.autocare.vehicle.mapper.VehicleMapper;
 import com.jordan.autocare.vehicle.repository.VehicleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,9 +27,9 @@ public class VehicleService {
     @Transactional
     public VehicleResponse create(VehicleCreateRequest request) {
 
-        User user  = userRepository.findById(request.userId())
-                .orElseThrow(() ->
-                        new RuntimeException("Usuario não encontrado"));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        User user = (User) authentication.getPrincipal();
 
         Vehicle vehicle = Vehicle.builder()
                 .brand(request.brand())
