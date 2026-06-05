@@ -65,4 +65,9 @@ public class MaintenanceService {
                 .map(MaintenanceMapper::toResponse)
                 .toList();
     }
+
+    @Transactional(readOnly = true)
+    public void deleteMaintenance(Long id) {
+        maintenanceRepository.deleteById(id);
+    }
 }

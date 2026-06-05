@@ -17,9 +17,6 @@ public record VehicleCreateRequest(
 
         @NotNull(message = "É necessário informar a quilometragem atual")
         @Positive(message = "A quilometragem deve ser positiva")
-        Integer currentMileage,
-
-        @NotNull(message = "O ID do usuário é obrigatório")
-        Long userId
+        Integer currentMileage
 ) {
 }

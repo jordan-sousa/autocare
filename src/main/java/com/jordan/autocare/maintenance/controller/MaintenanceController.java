@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/vehicles/{vehicleId}/maintenances")
@@ -31,5 +30,12 @@ public class MaintenanceController {
         return ResponseEntity.ok(
                 maintenanceService.findById(vehicleId, maintenanceId)
         );
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<MaintenanceResponse> delete(@PathVariable Long id) {
+
+        maintenanceService.deleteMaintenance(id);
+        return ResponseEntity.noContent().build();
     }
 }
