@@ -41,4 +41,11 @@ public class VehicleController {
 
         return ResponseEntity.ok(vehicleService.updateMileage(id, request));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+
+        vehicleService.deleteVehicle(id);
+        return ResponseEntity.noContent().build();
+    }
 }

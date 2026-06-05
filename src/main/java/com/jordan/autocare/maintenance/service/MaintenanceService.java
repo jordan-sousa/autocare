@@ -66,7 +66,7 @@ public class MaintenanceService {
                 .toList();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void deleteMaintenance(Long id) {
         maintenanceRepository.deleteById(id);
     }

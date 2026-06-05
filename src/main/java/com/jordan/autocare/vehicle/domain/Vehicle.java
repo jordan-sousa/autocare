@@ -1,11 +1,14 @@
 package com.jordan.autocare.vehicle.domain;
 
 import com.jordan.autocare.auth.domain.User;
+import com.jordan.autocare.maintenance.domain.Maintenance;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "vehicles")
@@ -30,6 +33,14 @@ public class Vehicle {
 
     @PositiveOrZero
     private Integer currentMileage;
+
+    @OneToMany(
+            mappedBy = "vehicle",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @Builder.Default
+    private List<Maintenance> maintenances = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

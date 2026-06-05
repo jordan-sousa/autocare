@@ -77,4 +77,9 @@ public class VehicleService {
                 .map(VehicleMapper::toResponse)
                 .toList();
     }
+
+    @Transactional
+    public void deleteVehicle(Long id) {
+        vehicleRepository.deleteById(id);
+    }
 }
