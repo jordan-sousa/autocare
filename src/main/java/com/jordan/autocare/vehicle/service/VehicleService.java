@@ -10,6 +10,8 @@ import com.jordan.autocare.vehicle.exception.VehicleNotFoundException;
 import com.jordan.autocare.vehicle.mapper.VehicleMapper;
 import com.jordan.autocare.vehicle.repository.VehicleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -71,11 +73,9 @@ public class VehicleService {
     }
 
     @Transactional(readOnly = true)
-    public List<VehicleResponse> findAll() {
-        return vehicleRepository.findAll()
-                .stream()
-                .map(VehicleMapper::toResponse)
-                .toList();
+    public Page<VehicleResponse> findAll(Pageable pageable) {
+        return vehicleRepository.findAll(pageable)
+                .map(VehicleMapper::toResponse);
     }
 
     @Transactional

@@ -6,6 +6,8 @@ import com.jordan.autocare.vehicle.dto.VehicleResponse;
 import com.jordan.autocare.vehicle.service.VehicleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +34,8 @@ public class VehicleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<VehicleResponse>> findAll() {
-        return ResponseEntity.ok(vehicleService.findAll());
+    public ResponseEntity<Page<VehicleResponse>> findAll(Pageable pageable) {
+        return ResponseEntity.ok(vehicleService.findAll(pageable));
     }
 
     @PatchMapping("/{id}/mileage")
