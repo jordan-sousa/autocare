@@ -9,9 +9,11 @@ import com.jordan.autocare.vehicle.dto.VehicleResponse;
 import com.jordan.autocare.vehicle.exception.VehicleNotFoundException;
 import com.jordan.autocare.vehicle.mapper.VehicleMapper;
 import com.jordan.autocare.vehicle.repository.VehicleRepository;
+import com.jordan.autocare.vehicle.specification.VehicleSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -73,8 +75,12 @@ public class VehicleService {
     }
 
     @Transactional(readOnly = true)
-    public Page<VehicleResponse> findAll(Pageable pageable) {
-        return vehicleRepository.findAll(pageable)
+    public Page<VehicleResponse> findAll(String brand, Integer year, Pageable pageable) {
+
+        Specification<Vehicle> spec = Specification.where(VehicleSpecification.brandEquals(brand)).
+                and(VehicleSpecification.yearEquals(year));
+
+        return vehicleRepository.findAll(spec, pageable)
                 .map(VehicleMapper::toResponse);
     }
 

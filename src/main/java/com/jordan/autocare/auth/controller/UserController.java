@@ -3,6 +3,7 @@ package com.jordan.autocare.auth.controller;
 import com.jordan.autocare.auth.dto.UserCreateRequest;
 import com.jordan.autocare.auth.dto.UserResponse;
 import com.jordan.autocare.auth.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,10 +20,12 @@ public class UserController {
 
     private final UserService userService;
 
+    @Operation(summary = "Criar usuario")
     @PostMapping
     public ResponseEntity<UserResponse> create(
             @RequestBody @Valid UserCreateRequest request
             ) {
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(userService.create(request));
     }

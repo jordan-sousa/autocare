@@ -3,6 +3,7 @@ package com.jordan.autocare.auth.controller;
 import com.jordan.autocare.auth.dto.AuthRequest;
 import com.jordan.autocare.auth.dto.AuthResponse;
 import com.jordan.autocare.auth.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @Operation(summary = "Fazer login")
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
 
